@@ -1,6 +1,5 @@
 DEFAULT_USER="jdavis"
 
-
 if [ `uname` = 'Darwin' ]; then
   #OSX Specific
   export ZSH=/Users/jdavis/.oh-my-zsh
@@ -13,9 +12,11 @@ elif [ `uname` = 'Linux' ]; then
 fi
 
 keys=`ssh-add -l`
-for i in ~/.ssh/id_*.pub; do 
-  if ! echo "$keys" | grep -q "${i%.pub}" ; then
-    ssh-add "${i%.pub}"
+if [ -d ~/.ssh/ ]; then
+  for i in ~/.ssh/id_*.pub; do
+    if ! echo "$keys" | grep -q "${i%.pub}" ; then
+      ssh-add "${i%.pub}"
+    fi
   fi
 done
 
@@ -28,27 +29,10 @@ export PATH=$PATH:/usr/local/opt/go/libexec/bin
 export GOPATH=~/Development/gosrc
 plugins=(git aws command-not-found node npm sudo golang python zsh-completions)
 
-eval "$(thefuck --alias)"
 TF_ALIAS=fuck alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 fpath=(/usr/local/share/zsh-completions $fpath)
 
 #autoload -U compinit && compinit #for zsh-completions -- doing funny things
-
-# Reset to remote head
-alias grst="git fetch origin && git reset --hard origin/master && git status"
-
-# Fetch and rebase
-alias grb="git stash && git fetch && git rebase origin/master && git stash pop"
-
-# Fetch and interactive-rebase
-alias grbi="git stash && git fetch && git rebase -i origin/master && git stash pop"
-
-# Gerrit - Sends changes for reviewer.
-function grev() {
-  git push origin HEAD:refs/for/master%r=$1
-}
-
-alias gitunfucked="git checkout master && git fetch && git reset --hard origin/master && git clean -f -d"
 
 alias pwgen="pwgen -Cs 20 1"
 
