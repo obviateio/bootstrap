@@ -124,7 +124,7 @@
 
   # Find commits by commit message
 
-  cm = "!f() { \
+  fcm = "!f() { \
       git log --pretty=custom --decorate --date=short --grep=\"$1\"; \
   }; f"
 
