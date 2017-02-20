@@ -65,6 +65,14 @@ sudo /tmp/fonts/install.sh
 curl -sSL https://get.docker.com/ | sh
 sudo usermod -aG docker $USERNAME
 
+#Ansible
+sudo add-apt-repository -y ppa:ansible/ansible
+sudo apt-get -y install ansible
+
+#Directory colors!
+# From https://github.com/huyz/dircolors-solarized
+curl -Lo ./.dircolors.ansi-dark https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark
+
 #OhMyZSH
 chsh -s $(which zsh)
 echo "### Once oh-my-zsh starts zsh, exit it to complete setup proccess ####"

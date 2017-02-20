@@ -3,12 +3,14 @@ DEFAULT_USER="jdavis"
 if [ `uname` = 'Darwin' ]; then
   #OSX Specific
   export ZSH=/Users/jdavis/.oh-my-zsh
-  source /usr/local/share/zsh/site-functions/_aws
-  source /usr/local/share/zsh/site-functions/_m
 elif [ `uname` = 'Linux' ]; then
   #Linux Specific
   export ZSH=/home/jdavis/.oh-my-zsh
-  source /usr/share/zsh/vendor-completions/_awscli
+fi
+
+if [[ -d "/usr/share/zsh/vendor-completions" ]]; then
+  fpath=(/usr/share/zsh/vendor-completions $fpath)
+  #autoload -U compinit && compinit #for zsh-completions -- doing funny things
 fi
 
 keys=`ssh-add -l`
@@ -17,27 +19,23 @@ if [ -d ~/.ssh/ ]; then
     if ! echo "$keys" | grep -q "${i%.pub}" ; then
       ssh-add "${i%.pub}"
     fi
-  fi
-done
+  done
+fi
 
-ZSH_THEME="agnoster"
+ZSH_THEME="agnostersgn"
 export UPDATE_ZSH_DAYS=7
 HIST_STAMPS="yyyy-mm-dd"
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 source $ZSH/oh-my-zsh.sh
 export PATH=$PATH:/usr/local/opt/go/libexec/bin
 export GOPATH=~/Development/gosrc
-plugins=(git aws command-not-found node npm sudo golang python zsh-completions)
+plugins=(git aws command-not-found node npm sudo go python zsh-completions mosh ansible battery)
 
 TF_ALIAS=fuck alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
-fpath=(/usr/local/share/zsh-completions $fpath)
-
-#autoload -U compinit && compinit #for zsh-completions -- doing funny things
-
 alias pwgen="pwgen -Cs 20 1"
+eval `dircolors ~/.dircolors.ansi-dark`
 
 unsetopt share_history
-
 
 # CASE_SENSITIVE="true"
 # HYPHEN_INSENSITIVE="true"
@@ -55,3 +53,4 @@ unsetopt share_history
 # For a full list of active aliases, run `alias`.
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+  
