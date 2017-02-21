@@ -1,6 +1,6 @@
 # Slightly modified https://github.com/zakaziko99/agnosterzak-ohmyzsh-theme
 # Updated by Jon "ShakataGaNai" Davis 2017
-# 
+#
 # vim:ft=zsh ts=2 sw=2 sts=2
 #
 # agnoster's Theme - https://gist.github.com/3712874
@@ -82,10 +82,10 @@ prompt_end() {
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
   if [[ -n "$SSH_CLIENT" ]]; then
-    prompt_segment magenta white "$fg_bold[white]%(!.%{%F{white}%}.)$USER@%m$fg_no_bold[white]"
+    prompt_segment magenta white "%{$fg_bold[white]%}%(!.%{%F{white}%}.)$USER@%m%{$fg_no_bold[white]%}"
   else
     # Username formatting
-    prompt_segment green white "$fg_bold[white]%(!.%{%F{white}%}.)$USER$fg_no_bold[white]"
+    prompt_segment green white "%{$fg_bold[white]%}%(!.%{%F{white}%}.)$USER%{$fg_no_bold[white]%}"
   fi
 }
 
@@ -128,7 +128,7 @@ prompt_battery() {
       else
         prompt_segment red white
       fi
-      echo -n "$fg_bold[white]$HEART$(battery_pct_remaining)%%$fg_no_bold[white]"
+      echo -n "%{$fg_bold[white]%}$HEART$(battery_pct_remaining)%%%{$fg_no_bold[white]%}"
     fi
 
   fi
@@ -229,12 +229,12 @@ prompt_git() {
     if [[ $commits_ahead -gt 0 && $commits_behind -gt 0 ]]; then has_diverged=true; fi
     if [[ $has_diverged == false && $commits_ahead -gt 0 ]]; then
       if [[ $bgclr == 'red' || $bgclr == 'magenta' ]] then
-        to_push=" $fg_bold[white]↑$commits_ahead$fg_bold[$fgclr]"
+        to_push=" %{$fg_bold[white]%}↑$commits_ahead%{$fg_bold[$fgclr]%}"
       else
-        to_push=" $fg_bold[black]↑$commits_ahead$fg_bold[$fgclr]"
+        to_push=" %{$fg_bold[black]%}↑$commits_ahead%{$fg_bold[$fgclr]%}"
       fi
     fi
-    if [[ $has_diverged == false && $commits_behind -gt 0 ]]; then to_pull=" $fg_bold[magenta]↓$commits_behind$fg_bold[$fgclr]"; fi
+    if [[ $has_diverged == false && $commits_behind -gt 0 ]]; then to_pull=" %{$fg_bold[magenta]%}↓$commits_behind%{$fg_bold[$fgclr]%}"; fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
       mode=" <B>"
@@ -246,7 +246,7 @@ prompt_git() {
 
     prompt_segment $bgclr $fgclr
 
-    echo -n "$fg_bold[$fgclr]${ref/refs\/heads\//$PL_BRANCH_CHAR $upstream_prompt}${mode}$to_push$to_pull$clean$tagged$stashed$untracked$modified$deleted$added$ready_commit$fg_no_bold[$fgclr]"
+    echo -n "%{$fg_bold[$fgclr]%}${ref/refs\/heads\//$PL_BRANCH_CHAR $upstream_prompt}${mode}$to_push$to_pull$clean$tagged$stashed$untracked$modified$deleted$added$ready_commit%{$fg_no_bold[$fgclr]%}"
   fi
 }
 
@@ -287,7 +287,7 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment cyan white "$fg_bold[white]%~$fg_no_bold[white]"
+  prompt_segment cyan white "%{$fg_bold[white]%}%~%{$fg_no_bold[white]%}"
 }
 
 # Virtualenv: current working virtualenv
@@ -300,7 +300,7 @@ prompt_virtualenv() {
 
 prompt_time() {
   # date/time uses http://strftime.net/ formatting
-  prompt_segment blue white "$fg_bold[white]%D{%FT%R%Z}$fg_no_bold[white]"
+  prompt_segment blue white "%{$fg_bold[white]%}%D{%FT%R%Z}%{$fg_no_bold[white]%}"
 }
 
 # Status:
