@@ -30,7 +30,20 @@ do
 	#TMP="dconf write $PREFIX$PROFILE/$X ${SETTINGS[$X]}"
 	echo $TMP
 	eval $TMP
-
 done
-exit
 
+dconf write /org/cinnamon/sounds/switch-enabled 'false'
+dconf write /org/cinnamon/settings-daemon/peripherals/touchpad/motion-threshold '5'
+dconf write /org/cinnamon/settings-daemon/peripherals/touchpad/natural-scroll 'false'
+dconf write /org/cinnamon/settings-daemon/peripherals/touchpad/vertical-edge-scrolling 'false'
+dconf write /org/cinnamon/settings-daemon/peripherals/touchpad/tap-to-click 'false'
+dconf write /org/cinnamon/desktop/keybindings/media-keys/screensaver "['<Super>l', 'XF86ScreenSaver']"
+dconf write /org/cinnamon/desktop/background/picture-options 'zoom'
+dconf write /org/cinnamon/desktop/background/slideshow/image-source 'xml:///usr/share/cinnamon-background-properties/linuxmint-serena.xml'
+dconf write /org/cinnamon/desktop/background/slideshow/random-order 'true'
+dconf write /org/cinnamon/desktop/background/slideshow/delay '5'
+dconf write /org/cinnamon/desktop/background/slideshow/slideshow-enabled 'true'
+dconf write /org/cinnamon/desktop/interface/clock-show-date 'true'
+
+
+exit

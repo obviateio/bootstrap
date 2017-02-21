@@ -8,8 +8,11 @@ mkdir ~/Development
 mkdir ~/.aws
 sudo apt-get update
 sudo apt-get dist-upgrade -y
-sudo apt-get install -y curl zsh wajig terminator thefuck dconf-editor python-pip git software-properties-common indicator-multiload
+sudo apt-get install -y curl zsh wajig terminator thefuck dconf-editor python-pip \
+	git software-properties-common indicator-multiload tlp tlp-rdw acpi powertop
+
 sudo pip install --upgrade pip setuptools
+sudo tlp start
 
 # Git config
 cp gitconfig ~/.gitconfig
