@@ -76,6 +76,14 @@ sudo apt-get -y install ansible
 # From https://github.com/huyz/dircolors-solarized
 curl -Lo ./.dircolors.ansi-dark https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark
 
+#VirtualBox & Minikube
+echo 'deb http://download.virtualbox.org/virtualbox/debian xenial contrib' | sudo tee /etc/apt/sources.list.d/vbox.list
+wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install -y virtualbox-5.1 virtualbox-dkms
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.16.0/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+
 #OhMyZSH
 chsh -s $(which zsh)
 echo "### Once oh-my-zsh starts zsh, exit it to complete setup proccess ####"
