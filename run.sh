@@ -9,10 +9,14 @@ mkdir ~/.aws
 sudo apt-get update
 sudo apt-get dist-upgrade -y
 sudo apt-get install -y curl zsh wajig terminator thefuck dconf-editor python-pip \
-	git software-properties-common indicator-multiload tlp tlp-rdw acpi powertop
+	git software-properties-common indicator-multiload tlp tlp-rdw acpi powertop \
+	build-essential
 
 sudo pip install --upgrade pip setuptools
 sudo tlp start
+
+# Display reset script, used in gnome-conf.sh
+ln -s ./display-reset ~/.display-reset
 
 # Git config
 cp gitconfig ~/.gitconfig

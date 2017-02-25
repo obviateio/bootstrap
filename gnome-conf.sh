@@ -44,6 +44,9 @@ dconf write /org/cinnamon/desktop/background/slideshow/random-order 'true'
 dconf write /org/cinnamon/desktop/background/slideshow/delay '5'
 dconf write /org/cinnamon/desktop/background/slideshow/slideshow-enabled 'true'
 dconf write /org/cinnamon/desktop/interface/clock-show-date 'true'
+dconf write /org/cinnamon/desktop/keybindings/custom-keybindings/custom0/binding=['<Primary><Alt>equal']
+dconf write /org/cinnamon/desktop/keybindings/custom-keybindings/custom0/command='~/.display-reset'
+dconf write /org/cinnamon/desktop/keybindings/custom-keybindings/custom0/name='Reset Monitors'
 
 
 exit
