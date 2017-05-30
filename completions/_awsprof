@@ -1,0 +1,14 @@
+#compdef awsprof
+
+_awsprof() {
+  local state
+
+  _arguments \
+    '1: :->aws_profile'
+
+  case $state in
+    (aws_profile) _arguments '1:profiles:(`awsprof ls`)'
+  esac
+}
+
+_awsprof ". $@"

@@ -9,21 +9,25 @@
 
 [alias]
 	# Reset to remote head
-	grst="git fetch origin && git reset --hard origin/master && git status"
+	grst = !git fetch origin && git reset --hard origin/master && git status
 
 	# Fetch and rebase
-	grb="git stash && git fetch && git rebase origin/master && git stash pop"
+	grb = !git stash && git fetch && git rebase origin/master && git stash pop
 
 	# Fetch and interactive-rebase
-	grbi="git stash && git fetch && git rebase -i origin/master && git stash pop"
+	grbi = !git stash && git fetch && git rebase -i origin/master && git stash pop
 
 	# Gerrit - Sends changes for reviewer.
 	grev = "!f() { \
 		git push origin HEAD:refs/for/master%r=\"$1\"; \
 	}; f"
 
-	unfucked="git checkout master && git fetch && git reset --hard origin/master && git clean -f -d"
+	unfucked = !git checkout master && git fetch && git reset --hard origin/master && git clean -f -d
 	
+###############
+	# From https://blog.scottnonnenberg.com/better-git-configuration/
+	prune = fetch --prune
+
 ###############
 
 	# A good list of alises http://haacked.com/archive/2014/07/28/github-flow-aliases/

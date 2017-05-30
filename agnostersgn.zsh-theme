@@ -317,6 +317,27 @@ prompt_status() {
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
+# Kube additions from https://gist.github.com/nballotta/cab3e389e5fb541222677e5b4ec90c7f
+prompt_kubecontext() {
+  if [[ $(kubectl config current-context) == *"testing"* ]]; then
+        prompt_segment green black "(`kubectl config current-context`)"
+  elif [[ $(kubectl config current-context) == *"tectonic"* ]]; then
+        prompt_segment yellow black "(`kubectl config current-context`)"
+  elif [[ $(kubectl config current-context) == *"staging"* ]]; then
+        prompt_segment yellow black "(`kubectl config current-context`)"
+  elif [[ $(kubectl config current-context) == *"production"* ]]; then
+        prompt_segment red yellow "(`kubectl config current-context`)"
+  fi
+}
+
+prompt_awsprofile() {
+  if [[ $AWS_DEFAULT_PROFILE == *"default"* ]] || [[ -z "$AWS_DEFAULT_PROFILE" ]]; then
+        prompt_segment green black "AWS@off"
+  else
+        prompt_segment red black "AWS@`echo $AWS_DEFAULT_PROFILE`"
+  fi
+}
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
@@ -328,6 +349,8 @@ build_prompt() {
   prompt_dir
   prompt_git
   prompt_hg
+  prompt_awsprofile
+  prompt_kubecontext
   prompt_end
   CURRENT_BG='NONE'
   echo -n "\n"

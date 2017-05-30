@@ -10,16 +10,23 @@ sudo apt-get update
 sudo apt-get dist-upgrade -y
 sudo apt-get install -y curl zsh wajig terminator thefuck dconf-editor python-pip \
 	git software-properties-common indicator-multiload tlp tlp-rdw acpi powertop \
-	build-essential
+	build-essential htop snapd
 
 sudo pip install --upgrade pip setuptools
 sudo tlp start
 
+# Fix middle mouse to NOT paste.
+echo "pointer = 1 6 3 4 5 2" | tee ~/.Xmodmap
+
 # Display reset script, used in gnome-conf.sh
-ln -s ./display-reset ~/.display-reset
+ln -s $PWD/display-reset ~/.display-reset
 
 # Git config
 cp gitconfig ~/.gitconfig
+
+# AWS Profile Tool
+sudo ln -s $PWD/scripts/awsprof /usr/bin/awsprof
+ln -s $PWD/completions ~/.oh-my-zsh/completions
 
 # AWS CLI
 curl -fsSL -o /usr/share/awscli/aws_zsh_completer.sh https://raw.githubusercontent.com/aws/aws-cli/develop/bin/aws_zsh_completer.sh && chmod a+x /usr/share/awscli/aws_zsh_completer.sh
@@ -79,6 +86,12 @@ sudo apt-get -y install ansible
 #Directory colors!
 # From https://github.com/huyz/dircolors-solarized
 curl -Lo ./.dircolors.ansi-dark https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark
+
+# Snap based utilities
+sudo snap install asciinema --classic
+sudo snap install uappexplorer-cli
+sudo snap install kubectl --classic
+sudo snap install terraform-snap
 
 #VirtualBox & Minikube
 echo 'deb http://download.virtualbox.org/virtualbox/debian xenial contrib' | sudo tee /etc/apt/sources.list.d/vbox.list

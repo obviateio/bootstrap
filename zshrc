@@ -1,4 +1,5 @@
 DEFAULT_USER="jdavis"
+plugins=(kubectl git aws command-not-found node npm sudo go python zsh-completions mosh ansible battery)
 
 if [ `uname` = 'Darwin' ]; then
   #OSX Specific
@@ -7,6 +8,8 @@ elif [ `uname` = 'Linux' ]; then
   #Linux Specific
   export ZSH=/home/jdavis/.oh-my-zsh
 fi
+
+ZSH_CUSTOM=/home/jdavis/.oh-my-zsh/custom
 
 if [[ -d "/usr/share/zsh/vendor-completions" ]]; then
   fpath=(/usr/share/zsh/vendor-completions $fpath)
@@ -29,11 +32,12 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 source $ZSH/oh-my-zsh.sh
 export PATH=$PATH:/usr/local/opt/go/libexec/bin
 export GOPATH=~/Development/gosrc
-plugins=(git aws command-not-found node npm sudo go python zsh-completions mosh ansible battery)
 
 TF_ALIAS=fuck alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 alias pwgen="pwgen -Cs 20 1"
 eval `dircolors ~/.dircolors.ansi-dark`
+
+alias awsprof=". awsprof"
 
 unsetopt share_history
 
@@ -45,7 +49,6 @@ unsetopt share_history
 # ENABLE_CORRECTION="true"
 # COMPLETION_WAITING_DOTS="true"
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
-# ZSH_CUSTOM=/path/to/new-custom-folder
 # export MANPATH="/usr/local/man:$MANPATH"
 # export LANG=en_US.UTF-8
 # export ARCHFLAGS="-arch x86_64"
@@ -53,4 +56,3 @@ unsetopt share_history
 # For a full list of active aliases, run `alias`.
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-  
