@@ -28,7 +28,7 @@ fi
 ZSH_THEME="agnostersgn"
 export UPDATE_ZSH_DAYS=7
 HIST_STAMPS="yyyy-mm-dd"
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/snap/bin"
 source $ZSH/oh-my-zsh.sh
 export PATH=$PATH:/usr/local/opt/go/libexec/bin
 export GOPATH=~/Development/gosrc
