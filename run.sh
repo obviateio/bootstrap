@@ -24,10 +24,6 @@ ln -s $PWD/display-reset ~/.display-reset
 # Git config
 cp gitconfig ~/.gitconfig
 
-# AWS Profile Tool
-sudo ln -s $PWD/scripts/awsprof /usr/bin/awsprof
-ln -s $PWD/completions ~/.oh-my-zsh/completions
-
 # AWS CLI
 curl -fsSL -o /usr/share/awscli/aws_zsh_completer.sh https://raw.githubusercontent.com/aws/aws-cli/develop/bin/aws_zsh_completer.sh && chmod a+x /usr/share/awscli/aws_zsh_completer.sh
 sudo pip install --upgrade awscli
@@ -107,6 +103,9 @@ echo "### Once oh-my-zsh starts zsh, exit it to complete setup proccess ####"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 cp zshrc ~/.zshrc
 
+# AWS Profile Tool
+sudo ln -s $PWD/scripts/awsprof /usr/bin/awsprof
+ln -s $PWD/completions ~/.oh-my-zsh/completions
 
 # Mackup (Backup) -- Should be last
 sudo pip install --upgrade mackup
