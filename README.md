@@ -19,4 +19,4 @@ It's very customized to my software and my preferences. I doubt anyone
  * Enjoy!
 
 ## License
-This repository licensed under MIT. See [LICENSE]
+This repository licensed under MIT. See LICENSE
