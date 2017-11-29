@@ -2,11 +2,10 @@
 [user]
 	email = jon@snowulf.com
 	name = Jon Davis
+[log]
+	date = local
 [push]
 	default = simple
-
-
-
 [alias]
 	# Reset to remote head
 	grst = !git fetch origin && git reset --hard origin/master && git status
@@ -16,11 +15,6 @@
 
 	# Fetch and interactive-rebase
 	grbi = !git stash && git fetch && git rebase -i origin/master && git stash pop
-
-	# Gerrit - Sends changes for reviewer.
-	grev = "!f() { \
-		git push origin HEAD:refs/for/master%r=\"$1\"; \
-	}; f"
 
 	unfucked = !git checkout master && git fetch && git reset --hard origin/master && git clean -f -d
 	
@@ -90,7 +84,7 @@
         ss = status -sb
         hist = log --graph --pretty=custom           # Show custom graph
         l = log --pretty=custom                      # Show custom log
-        ll = log --stat --abbrev-commit
+        ll = log --stat --abbrev-commit --date=iso-local
         lc = shortlog --summary --numbered           # List contributors
 
         # Reset
