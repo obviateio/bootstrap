@@ -1,0 +1,14 @@
+#!/bin/bash
+
+fig=`cat /etc/hostname|awk -F'.' '{print $1}'| figlet`
+ray=(196 208 220 82 27 13)
+cnt=0
+rst="\033[38;0m"
+
+printf "\n"
+while IFS= read -r line; do
+    printf "\033[38;5;${ray[${cnt}]}m"
+    printf " $line "
+    printf "$rst\n"
+    cnt=$[cnt + 1]
+done < <(printf '%s\n' "$fig")

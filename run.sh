@@ -21,10 +21,14 @@ sudo apt-get update
 sudo apt-get dist-upgrade -y
 sudo apt-get install -y curl zsh wajig thefuck dconf-editor python-pip unzip \
 	git software-properties-common build-essential htop snapd pv tmux \
-	python3 python3-pip lolcat zsh-syntax-highlighting 
+	python3 python3-pip lolcat zsh-syntax-highlighting mlocate
 
 if [ $srv == 1 ]; then
- sudo apt-get install -y zfsutils-linux smartmontools nfs-common
+ sudo apt-get install -y zfsutils-linux smartmontools nfs-common update-motd
+ sudo rm /etc/update-motd.d/10-help-text /etc/update-motd.d/90-updates-available
+ sudo cp ./motd/11-funhost /etc/update-motd.d/11-funhost
+ sudo cp ./motd/12-sysinfo /etc/update-motd.d/12-sysinfo
+ sudo update-motd
 else
  sudo apt-get install -y terminator indicator-multiload tlp tlp-rdw acpi powertop
 fi
@@ -142,5 +146,6 @@ fi
 ZSH_CUSTOM=~/.oh-my-zsh/custom/
 cp agnostersgn.zsh-theme $ZSH_CUSTOM/agnostersgn.zsh-theme
 git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+updatedb &
 
 printf "${BLUE}####### ${RED}Install Done! ${BLUE}######${NC}\n\n"
