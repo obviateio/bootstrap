@@ -1,35 +1,11 @@
-# Slightly modified https://github.com/zakaziko99/agnosterzak-ohmyzsh-theme
-# Updated by Jon "ShakataGaNai" Davis 2017
+# Based originally from: https://github.com/zakaziko99/agnosterzak-ohmyzsh-theme
+# Updated by Jon "ShakataGaNai" Davis 2018
 #
-# vim:ft=zsh ts=2 sw=2 sts=2
 #
-# agnoster's Theme - https://gist.github.com/3712874
-# A Powerline-inspired theme for ZSH
-#
-# # README
-#
-# In order for this theme to render correctly, you will need a
-# [Powerline-patched font](https://github.com/Lokaltog/powerline-fonts).
-# Make sure you have a recent version: the code points that Powerline
-# uses changed in 2012, and older versions will display incorrectly,
-# in confusing ways.
-#
-# In addition, I recommend the
-# [Solarized theme](https://github.com/altercation/solarized/) and, if you're
-# using it on Mac OS X, [iTerm 2](http://www.iterm2.com/) over Terminal.app -
-# it has significantly better color fidelity.
-#
-# # Goals
-#
-# The aim of this theme is to only show you *relevant* information. Like most
-# prompts, it will only show git information when in a git working directory.
-# However, it goes a step further: everything from the current user and
-# hostname to whether the last call exited with an error to whether background
-# jobs are running in this shell will all be displayed automatically when
-# appropriate.
+# Icon Codes: https://nerdfonts.com/#cheat-sheet
+# Custom Color: https://jonasjacek.github.io/colors/
+# Solarized Definition: http://ethanschoonover.com/solarized
 
-### Segment drawing
-# A few utility functions to make it easy and re-usable to draw segmented prompts
 
 CURRENT_BG='NONE'
 
@@ -37,21 +13,10 @@ CURRENT_BG='NONE'
 
 () {
   local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-  # NOTE: This segment separator character is correct.  In 2012, Powerline changed
-  # the code points they use for their special characters. This is the new code point.
-  # If this is not working for you, you probably have an old version of the
-  # Powerline-patched fonts installed. Download and install the new version.
-  # Do not submit PRs to change this unless you have reviewed the Powerline code point
-  # history and have new information.
-  # This is defined using a Unicode escape sequence so it is unambiguously readable, regardless of
-  # what font the user is viewing this source code in. Do not replace the
-  # escape sequence with a single literal character.
   SEGMENT_SEPARATOR=$'\ue0b0' # 
+  RSEGMENT_SEPARATOR=$'\ue0b2'
 }
 
-# Begin a segment
-# Takes two arguments, background and foreground. Both can be omitted,
-# rendering default background/foreground.
 prompt_segment() {
   local bg fg
   [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
@@ -91,46 +56,31 @@ prompt_context() {
 
 # Battery Level
 prompt_battery() {
-  HEART='♥ '
+  if [ $(battery_pct 2> /dev/null) ];then
+   # http://fontawesome.io/cheatsheet/
+   SYM="\uf011 "
+   CHG="\uf1e6 "
+   BATTF="\uf240 "
+   BATTH="\uf242 "
+   BATTE="\uf244 "
 
-  if [[ $(uname) == "Linux"  ]] ; then
-
-    function battery_is_charging() {
-      ! [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]]
-    }
-
-    function battery_pct() {
-      if (( $+commands[acpi] )) ; then
-        echo "$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
-      fi
-    }
-
-    function battery_pct_remaining() {
-      if [ ! $(battery_is_charging) ] ; then
-        battery_pct
-      else
-        echo "External Power"
-      fi
-    }
-
-    function battery_time_remaining() {
-      if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
-        echo $(acpi | cut -f3 -d ',')
-      fi
-    }
-
-    b=$(battery_pct_remaining)
-    if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
-      if [ $b -gt 40 ] ; then
+    b=$(battery_pct)
+    if plugged_in ; then
+      SYM=$CHG
+      prompt_segment blue white
+    else
+      if [ $b -gt 50 ] ; then
+        SYM=$BATTF
         prompt_segment green white
       elif [ $b -gt 20 ] ; then
+        SYM=$BATTH
         prompt_segment yellow white
       else
+        SYM=$BATTE
         prompt_segment red white
       fi
-      echo -n "%{$fg_bold[white]%}$HEART$(battery_pct_remaining)%%%{$fg_no_bold[white]%}"
     fi
-
+    echo -n "%{$fg_bold[white]%}$SYM$b%%%{$fg_no_bold[white]%}"
   fi
 }
 
@@ -250,57 +200,15 @@ prompt_git() {
   fi
 }
 
-prompt_hg() {
-  local rev status
-  if $(hg id >/dev/null 2>&1); then
-    if $(hg prompt >/dev/null 2>&1); then
-      if [[ $(hg prompt "{status|unknown}") = "?" ]]; then
-        # if files are not added
-        prompt_segment red white
-        st='±'
-      elif [[ -n $(hg prompt "{status|modified}") ]]; then
-        # if any modification
-        prompt_segment yellow black
-        st='±'
-      else
-        # if working copy is clean
-        prompt_segment green black
-      fi
-      echo -n $(hg prompt "☿ {rev}@{branch}") $st
-    else
-      st=""
-      rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
-      branch=$(hg id -b 2>/dev/null)
-      if `hg st | grep -q "^\?"`; then
-        prompt_segment red black
-        st='±'
-      elif `hg st | grep -q "^[MA]"`; then
-        prompt_segment yellow black
-        st='±'
-      else
-        prompt_segment green black
-      fi
-      echo -n "☿ $rev@$branch" $st
-    fi
-  fi
-}
-
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment cyan white "%{$fg_bold[white]%}%~%{$fg_no_bold[white]%}"
-}
-
-# Virtualenv: current working virtualenv
-prompt_virtualenv() {
-  local virtualenv_path="$VIRTUAL_ENV"
-  if [[ -n $virtualenv_path && -n $VIRTUAL_ENV_DISABLE_PROMPT ]]; then
-    prompt_segment blue black "(`basename $virtualenv_path`)"
-  fi
+  SYM="\uf114 "
+  prompt_segment cyan white "%{$fg_bold[white]%}$SYM %~%{$fg_no_bold[white]%}"
 }
 
 prompt_time() {
   # date/time uses http://strftime.net/ formatting
-  prompt_segment blue white "%{$fg_bold[white]%}%D{%FT%R%Z}%{$fg_no_bold[white]%}"
+  prompt_segment blue white "%{$fg_bold[white]%}\uf073 %D{%FT%R%Z}%{$fg_no_bold[white]%}"
 }
 
 # Status:
@@ -319,22 +227,90 @@ prompt_status() {
 
 # Kube additions from https://gist.github.com/nballotta/cab3e389e5fb541222677e5b4ec90c7f
 prompt_kubecontext() {
-  if [[ $(kubectl config current-context) == *"testing"* ]]; then
+  if type "kubectl" > /dev/null; then
+   if [ $(kubectl config get-contexts|wc -l) -gt 1 ]; then
+    if [[ $(kubectl config current-context) == *"testing"* ]]; then
         prompt_segment green black "(`kubectl config current-context`)"
-  elif [[ $(kubectl config current-context) == *"tectonic"* ]]; then
+    elif [[ $(kubectl config current-context) == *"tectonic"* ]]; then
         prompt_segment yellow black "(`kubectl config current-context`)"
-  elif [[ $(kubectl config current-context) == *"staging"* ]]; then
+    elif [[ $(kubectl config current-context) == *"staging"* ]]; then
         prompt_segment yellow black "(`kubectl config current-context`)"
-  elif [[ $(kubectl config current-context) == *"production"* ]]; then
+    elif [[ $(kubectl config current-context) == *"production"* ]]; then
         prompt_segment red yellow "(`kubectl config current-context`)"
+    fi
+   fi
   fi
 }
 
 prompt_awsprofile() {
-  if [[ $AWS_DEFAULT_PROFILE == *"default"* ]] || [[ -z "$AWS_DEFAULT_PROFILE" ]]; then
+  if [ "$(ls -A ~/.aws)" ]; then
+   if [[ $AWS_DEFAULT_PROFILE == *"default"* ]] || [[ -z "$AWS_DEFAULT_PROFILE" ]]; then
         prompt_segment green black "AWS@off"
-  else
+   else
         prompt_segment red black "AWS@`echo $AWS_DEFAULT_PROFILE`"
+   fi
+  fi
+}
+
+prompt_music(){
+  if [ "$OS" = "MACOS" ]; then
+   P=`jq -j '.playing' ~/Library/Application\ Support/Google\ Play\ Music\ Desktop\ Player/json_store/playback.json`
+   if [[ $P == "true" ]]; then
+         A=`jq -j '.song.title' ~/Library/Application\ Support/Google\ Play\ Music\ Desktop\ Player/json_store/playback.json`
+         B=`jq -j '.song.artist' ~/Library/Application\ Support/Google\ Play\ Music\ Desktop\ Player/json_store/playback.json`
+         prompt_segment 92 black
+         echo -n "\uf04b $B - $A"
+   fi
+  fi
+}
+
+prompt_internet(){
+  if [ "$OS" = "MACOS" ]; then
+   AP="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
+   #source on quality levels - http://www.wireless-nets.com/resources/tutorials/define_SNR_values.html
+   #source on signal levels  - http://www.speedguide.net/faq/how-to-read-rssisignal-and-snrnoise-ratings-440
+   local signal=$($AP -I | grep agrCtlRSSI | awk '{print $2}' | sed 's/-//g')
+   local noise=$($AP -I | grep agrCtlNoise | awk '{print $2}' | sed 's/-//g')
+   local SNR=$(bc <<<"scale=2; $signal / $noise")
+
+   local net=$(curl -D- -o /dev/null -s http://www.google.com | grep HTTP/1.1 | awk '{print $2}')
+   local color='yellow'
+   local symbol="\uf197"
+
+   # Excellent Signal (5 bars)
+   if [[ ! -z "${signal// }" ]] && [[ $SNR -gt .40 ]] ;
+     then color='blue' ; symbol="\uf1eb" ;
+   fi
+
+   # Good Signal (3-4 bars)
+   if [[ ! -z "${signal// }" ]] && [[ ! $SNR -gt .40 ]] && [[ $SNR -gt .25 ]] ;
+     then color='green' ; symbol="\uf1eb" ;
+   fi
+
+   # Low Signal (2 bars)
+   if [[ ! -z "${signal// }" ]] && [[ ! $SNR -gt .25 ]] && [[ $SNR -gt .15 ]] ;
+     then color='yellow' ; symbol="\uf1eb" ;
+   fi
+
+   # Very Low Signal (1 bar)
+   if [[ ! -z "${signal// }" ]] && [[ ! $SNR -gt .15 ]] && [[ $SNR -gt .10 ]] ;
+     then color='%red' ; symbol="\uf1eb" ;
+   fi
+
+   # No Signal - No Internet
+   if [[ ! -z "${signal// }" ]] && [[ ! $SNR -gt .10 ]] ;
+     then color='red' ; symbol="\uf011";
+   fi
+   if [[ -z "${signal// }" ]] && [[ "$net" -ne 200 ]] ;
+     then color='red' ; symbol="\uf011" ;
+   fi
+
+   # Ethernet Connection (no wifi, hardline)
+   if [[ -z "${signal// }" ]] && [[ "$net" -eq 200 ]] ;
+     then color='blue' ; symbol="\uf197" ;
+   fi
+   prompt_segment $color white
+   echo -n " $symbol " # \f1eb is wifi bars
   fi
 }
 
@@ -344,13 +320,13 @@ build_prompt() {
   echo -n "\n"
   prompt_status
   prompt_battery
+  prompt_internet
   prompt_time
-  prompt_virtualenv
   prompt_dir
   prompt_git
-  prompt_hg
   prompt_awsprofile
   prompt_kubecontext
+  prompt_music
   prompt_end
   CURRENT_BG='NONE'
   echo -n "\n"
