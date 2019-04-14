@@ -3,19 +3,19 @@
 PROFS=`grep "\[profile " ~/.aws/config|cut -f2- -d" "|tr -d "\]"`
 
 if [ -z "$1" ]; then
-	echo "Example: awsprof ls"
+    echo "Example: awsprof ls"
 else
-	if [[ "$1" == "ls" ]]; then
-		echo 'OFF'
-		echo $PROFS
-	elif [[ "$1" == "OFF" ]] || [[ "$1" == "off" ]]; then
-		unset AWS_DEFAULT_PROFILE
-	elif [ -n $1 ]; then
-		if echo "$PROFS" | grep --quiet "$1"; then
-			echo "AWS Profile Switched To: $1"
-			export AWS_DEFAULT_PROFILE=$1
-		else
-			echo "INVALID PROFILE"
-		fi
-	fi
+    if [[ "$1" == "ls" ]]; then
+        echo 'OFF'
+        echo $PROFS
+    elif [[ "$1" == "OFF" ]] || [[ "$1" == "off" ]]; then
+        unset AWS_DEFAULT_PROFILE
+    elif [ -n $1 ]; then
+        if echo "$PROFS" | grep --quiet "$1"; then
+            echo "AWS Profile Switched To: $1"
+            export AWS_DEFAULT_PROFILE=$1
+        else
+            echo "INVALID PROFILE"
+        fi
+    fi
 fi
