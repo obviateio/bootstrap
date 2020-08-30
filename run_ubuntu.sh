@@ -18,22 +18,27 @@ echo 'Acquire::ForceIPv4 "true";' | sudo tee /etc/apt/apt.conf.d/99force-ipv4
 # Do some basics
 sudo apt-get update
 sudo apt-get dist-upgrade -y
-sudo apt-get install -y curl zsh wajig thefuck dconf-editor python-pip unzip \
+sudo apt-get install -y curl zsh wajig thefuck dconf-editor unzip \
     git software-properties-common build-essential htop snapd pv tmux \
     python3 python3-pip lolcat zsh-syntax-highlighting mlocate
 
 if [ $SRV ]; then
-    sudo apt-get install -y zfsutils-linux smartmontools nfs-common update-motd
-    sudo rm /etc/update-motd.d/10-help-text /etc/update-motd.d/90-updates-available
+    sudo apt-get install -y zfsutils-linux smartmontools nfs-common update-motd figlet
+    sudo rm /etc/update-motd.d/50-motd-news
+    sudo rm /etc/update-motd.d/10-help-text
+    sudo rm /etc/cron.d/popularity-contest
+    sudo sed -i "s/ENABLED=1/ENABLED=0/" /etc/default/motd-news
+#    sudo rm /etc/update-motd.d/10-help-text /etc/update-motd.d/90-updates-available
     sudo cp ./motd/11-funhost /etc/update-motd.d/11-funhost
-    sudo cp ./motd/12-sysinfo /etc/update-motd.d/12-sysinfo
+#    sudo cp ./motd/12-sysinfo /etc/update-motd.d/12-sysinfo
     sudo update-motd
 else
     sudo apt-get install -y terminator indicator-multiload tlp tlp-rdw acpi powertop
 fi
 
-sudo pip install --upgrade pip setuptools
-sudo pip3 install --upgrade pip setuptools
+#sudo pip install --upgrade pip setuptools
+#sudo pip3 install --upgrade pip setuptools
+sudo python3 -m pip install --upgrade pip setuptools
 
 # Git config
 cp gitconfig ~/.gitconfig
@@ -103,7 +108,7 @@ sudo add-apt-repository -y ppa:ansible/ansible
 sudo apt-get -y install ansible
 
 #Directory colors!
-# From https://github.com/huyz/dircolors-solarized
+# From https://github.com/seebi/dircolors-solarized
 curl -Lo ~/.dircolors.256dark https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.256dark
 
 # Snap based utilities
@@ -113,7 +118,7 @@ sudo snap install uappexplorer-cli
 sudo snap install terraform-snap
 
 #OhMyZSH
-chsh -s $(which zsh)
+#chsh -s $(which zsh)
 printf "${BLUE}####### ${RED}Once oh-my-zsh starts zsh, exit it to complete setup proccess ${BLUE}######${NC}\n"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 ln -s $PWD/dotfiles/zshrc ~/.zshrc
@@ -133,6 +138,15 @@ fi
 ZSH_CUSTOM=~/.oh-my-zsh/custom/
 cp agnostersgn.zsh-theme $ZSH_CUSTOM/agnostersgn.zsh-theme
 git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
-updatedb &
+#updatedb &
+
+### Misc Fixes
+wget https://github.com/Peltoche/lsd/releases/download/0.18.0/lsd_0.18.0_amd64.deb -O /tmp/lsd.deb
+sudo dpkg -i /tmp/lsd.deb
+rm /tmp/lsd.deb
+
+git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-completions
+
+
 
 printf "${BLUE}####### ${RED}Install Done! ${BLUE}######${NC}\n\n"
