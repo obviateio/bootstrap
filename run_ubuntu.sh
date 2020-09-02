@@ -44,8 +44,8 @@ sudo python3 -m pip install --upgrade pip setuptools
 cp gitconfig ~/.gitconfig
 
 # AWS CLI
-curl -fsSL -o /usr/share/awscli/aws_zsh_completer.sh https://raw.githubusercontent.com/aws/aws-cli/develop/bin/aws_zsh_completer.sh && chmod a+x /usr/share/awscli/aws_zsh_completer.sh
-sudo pip install --upgrade awscli
+#curl -fsSL -o /usr/share/awscli/aws_zsh_completer.sh https://raw.githubusercontent.com/aws/aws-cli/develop/bin/aws_zsh_completer.sh && chmod a+x /usr/share/awscli/aws_zsh_completer.sh
+#sudo pip install --upgrade awscli
 
 if [ ! $SRV]; then
     sudo tlp start

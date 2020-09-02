@@ -76,7 +76,7 @@ DISABLE_AUTO_TITLE="true"
 # COMPLETION_WAITING_DOTS="true"
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 # export MANPATH="/usr/local/man:$MANPATH"
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 # export ARCHFLAGS="-arch x86_64"
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 # For a full list of active aliases, run `alias`.
@@ -111,9 +111,10 @@ profzsh() {
     shell=${1-$SHELL}
     ZPROF=true $shell -i -c exit
 }
+
 eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
-function precmd () {
+function set_terminal_title() {
   H=$(hostname)
   if [[ ${#H} -gt 9 ]]; then
     HO="${H:0:3}...${H: -3}"
