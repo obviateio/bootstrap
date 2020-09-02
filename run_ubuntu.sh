@@ -13,7 +13,7 @@ else
 fi
 
 # Force APT to use ipv4, security.ubuntu.com is broken on IPv6
-echo 'Acquire::ForceIPv4 "true";' | sudo tee /etc/apt/apt.conf.d/99force-ipv4
+# echo 'Acquire::ForceIPv4 "true";' | sudo tee /etc/apt/apt.conf.d/99force-ipv4
 
 # Do some basics
 sudo apt-get update
@@ -83,57 +83,57 @@ if [ ! $SRV]; then
 fi
 
 #GoLang
-sudo add-apt-repository -y ppa:ubuntu-lxc/lxd-stable
-sudo apt-get update
-sudo apt-get install -y golang
-#gopath="/home/$USER/Development/go"
-#mkdir $gopath
-#echo "export GOROOT="$gopath >> ~/.zshrc
-#echo "export PATH="$PATH":"$gopath"/bin" >> ~/.zshrc
+#sudo add-apt-repository -y ppa:ubuntu-lxc/lxd-stable
+#sudo apt-get update
+#sudo apt-get install -y golang
+
+##gopath="/home/$USER/Development/go"
+##mkdir $gopath
+##echo "export GOROOT="$gopath >> ~/.zshrc
+##echo "export PATH="$PATH":"$gopath"/bin" >> ~/.zshrc
 
 #NodeJS
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-sudo apt-get install nodejs
-sudo npm install -g diff-so-fancy
+#curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+#sudo apt-get install nodejs
+#sudo npm install -g diff-so-fancy
 
 
 #Docker & Minikube
 #curl -sSL https://get.docker.com/ | sh
 #sudo usermod -aG docker $USERNAME
-curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.25.2/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+#curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.25.2/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+#curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 
-#Ansible
-sudo add-apt-repository -y ppa:ansible/ansible
-sudo apt-get -y install ansible
 
 #Directory colors!
 # From https://github.com/seebi/dircolors-solarized
 curl -Lo ~/.dircolors.256dark https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.256dark
 
 # Snap based utilities
-sudo snap install asciinema --classic
-sudo snap install uappexplorer-cli
+#sudo snap install asciinema --classic
+#sudo snap install uappexplorer-cli
 #sudo snap install kubectl --classic # Not up to date
-sudo snap install terraform-snap
+#sudo snap install terraform-snap
 
 #OhMyZSH
 #chsh -s $(which zsh)
 printf "${BLUE}####### ${RED}Once oh-my-zsh starts zsh, exit it to complete setup proccess ${BLUE}######${NC}\n"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+rm ~/.zshrc
 ln -s $PWD/dotfiles/zshrc ~/.zshrc
 
 # AWS Profile Tool
-sudo ln -s $PWD/scripts/awsprof /usr/bin/awsprof
-ln -s $PWD/completions ~/.oh-my-zsh/completions
+#sudo ln -s $PWD/scripts/awsprof /usr/bin/awsprof
+#ln -s $PWD/completions ~/.oh-my-zsh/completions
 
-if [ $srv == 0 ]; then
- # Mackup (Backup) -- Should be last
- sudo pip install --upgrade mackup
- cp ./mackup.cfg ~/.mackup.cfg
- touch ~/.zshrc
- mackup backup -f
-fi
+
+#if [ $srv == 0 ]; then
+# # Mackup (Backup) -- Should be last
+# sudo pip install --upgrade mackup
+# cp ./mackup.cfg ~/.mackup.cfg
+# touch ~/.zshrc
+# mackup backup -f
+#fi
 
 ZSH_CUSTOM=~/.oh-my-zsh/custom/
 cp agnostersgn.zsh-theme $ZSH_CUSTOM/agnostersgn.zsh-theme
@@ -146,7 +146,9 @@ sudo dpkg -i /tmp/lsd.deb
 rm /tmp/lsd.deb
 
 git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-completions
-
-
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+#echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> /home/jdavis/.zshrc
+eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+brew install derailed/k9s/k9s asciinema kubectl ansible helm
 
 printf "${BLUE}####### ${RED}Install Done! ${BLUE}######${NC}\n\n"

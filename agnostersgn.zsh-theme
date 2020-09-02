@@ -244,27 +244,27 @@ prompt_kubecontext() {
   fi
 }
 
-prompt_awsprofile() {
-  if [ "$(ls -A ~/.aws)" ]; then
-   if [[ $AWS_DEFAULT_PROFILE == *"default"* ]] || [[ -z "$AWS_DEFAULT_PROFILE" ]]; then
-        prompt_segment green black "AWS@off"
-   else
-        prompt_segment red black "AWS@`echo $AWS_DEFAULT_PROFILE`"
-   fi
-  fi
-}
+#prompt_awsprofile() {
+#  if [ "$(ls -A ~/.aws)" ]; then
+#   if [[ $AWS_DEFAULT_PROFILE == *"default"* ]] || [[ -z "$AWS_DEFAULT_PROFILE" ]]; then
+#        prompt_segment green black "AWS@off"
+#   else
+#        prompt_segment red black "AWS@`echo $AWS_DEFAULT_PROFILE`"
+#   fi
+#  fi
+#}
 
-prompt_music(){
-  if [ "$OS" = "MACOS" ]; then
-   P=`jq -j '.playing' ~/Library/Application\ Support/Google\ Play\ Music\ Desktop\ Player/json_store/playback.json`
-   if [[ $P == "true" ]]; then
-         A=`jq -j '.song.title' ~/Library/Application\ Support/Google\ Play\ Music\ Desktop\ Player/json_store/playback.json`
-         B=`jq -j '.song.artist' ~/Library/Application\ Support/Google\ Play\ Music\ Desktop\ Player/json_store/playback.json`
-         prompt_segment 92 black
-         echo -n "\uf04b $B - $A"
-   fi
-  fi
-}
+#prompt_music(){
+#  if [ "$OS" = "MACOS" ]; then
+#   P=`jq -j '.playing' ~/Library/Application\ Support/Google\ Play\ Music\ Desktop\ Player/json_store/playback.json`
+#   if [[ $P == "true" ]]; then
+#         A=`jq -j '.song.title' ~/Library/Application\ Support/Google\ Play\ Music\ Desktop\ Player/json_store/playback.json`
+#         B=`jq -j '.song.artist' ~/Library/Application\ Support/Google\ Play\ Music\ Desktop\ Player/json_store/playback.json`
+#         prompt_segment 92 black
+#         echo -n "\uf04b $B - $A"
+#   fi
+#  fi
+#}
 
 prompt_internet(){
   if [ "$OS" = "MACOS" ]; then
@@ -326,9 +326,9 @@ build_prompt() {
   prompt_time
   prompt_dir
   prompt_git
-  prompt_awsprofile
+#  prompt_awsprofile
   prompt_kubecontext
-  prompt_music
+#  prompt_music
   prompt_end
   CURRENT_BG='NONE'
   echo -n "\n"

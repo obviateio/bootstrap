@@ -3,7 +3,6 @@ BLUE='\033[0;34m'; RED='\033[0;31m'; NC='\033[0m'
 
 # Do some basic "universal" setup.
 mkdir -p ~/Development
-mkdir -p ~/.aws
 
 
 # OS Detection. Mac? Ubuntu? Server?
@@ -25,5 +24,4 @@ else
     fi
 fi
 
-# https://github.com/seebi/dircolors-solarized/blob/master/dircolors.ansi-dark
-# .dircolors.ansi-darks
+
