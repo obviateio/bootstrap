@@ -34,12 +34,15 @@ fi
 
 eval `ssh-agent -s`
 keys=`ssh-add -l`
+setopt +o nomatch
 if [ -d ~/.ssh/ ]; then
-    for i in ~/.ssh/id_*.pub; do
-        if ! echo "$keys" | grep -q "${i%.pub}" ; then
-            ssh-add "${i%.pub}"
-        fi
-    done
+ for i in ~/.ssh/id_*.pub; do
+  if [ -f $i ]; then
+   if ! echo "$keys" | grep -q "${i%.pub}" ; then
+    ssh-add "${i%.pub}"
+   fi
+  fi
+ done
 fi
 
 ZSH_THEME="agnostersgn"
