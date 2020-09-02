@@ -17,7 +17,7 @@ fi
 
 # Do some basics
 sudo apt-get update
-sudo apt-get dist-upgrade -y
+#sudo apt-get dist-upgrade -y
 sudo apt-get install -y curl zsh wajig thefuck dconf-editor unzip \
     git software-properties-common build-essential htop snapd pv tmux \
     python3 python3-pip lolcat zsh-syntax-highlighting mlocate
