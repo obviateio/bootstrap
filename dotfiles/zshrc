@@ -15,8 +15,19 @@ fi
 export ZSH=$HOME/.oh-my-zsh
 
 ZSH_CUSTOM=$HOME/.oh-my-zsh/custom
-plugins=(git command-not-found sudo python zsh-completions mosh ansible iterm2 zsh-autosuggestions)
+plugins=(git command-not-found sudo python zsh-completions mosh ansible zsh-autosuggestions)
 #plugins=(node npm go)
+
+function precmd() {
+  H=$(hostname)
+  if [[ ${#H} -gt 9 ]]; then
+    HO="${H:0:3}...${H: -3}"
+  else
+    HO=$H
+  fi
+  title " $HO:%~% "
+}
+
 
 #if [ "$(ls -A ~/.aws)" ]; then
 # plugins=( aws )
@@ -32,8 +43,11 @@ if [[ -d "/usr/share/zsh/vendor-completions" ]]; then
     fpath=(/usr/share/zsh/vendor-completions $fpath)
 fi
 
-eval `ssh-agent -s`
-keys=`ssh-add -l`
+keys=`ssh-add -l 2>&1`
+if echo $keys|grep -q "agent" ; then
+ eval `ssh-agent -s`
+fi
+
 setopt +o nomatch
 if [ -d ~/.ssh/ ]; then
  for i in ~/.ssh/id_*.pub; do
@@ -53,13 +67,13 @@ source $ZSH/oh-my-zsh.sh
 export MICRO_TRUECOLOR=1
 
 if [ $MACOS ]; then
-    plugin=(battery)
+    plugin=(battery iterm2)
     eval `gdircolors ~/.dircolors.256dark`
-    export PATH="/usr/local/sbin:/usr/local/opt/go/libexec/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/snap/bin:$PATH:/usr/local/opt/go/libexec/bin"
+    export PATH="/usr/local/sbin:/usr/local/opt/go/libexec/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/snap/bin:$PATH"
     export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 else
     eval `dircolors ~/.dircolors.256dark`
-    export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/snap/bin:/usr/games" 
+    export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/snap/bin:/usr/games"
 fi
 #export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin
 
@@ -103,7 +117,7 @@ export LANG=en_US.UTF-8
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
 
-alias lsd="ls --color=always"
+alias ls="lsd --color=always"
 alias lols="ls --color=no | lolcat"
 
 if [[ "$ZPROF" = true ]]; then
@@ -117,12 +131,3 @@ profzsh() {
 
 eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
-function set_terminal_title() {
-  H=$(hostname)
-  if [[ ${#H} -gt 9 ]]; then
-    HO="${H:0:3}...${H: -3}"
-  else
-    HO=$H
-  fi
-  title "$HO:%~%"
-}

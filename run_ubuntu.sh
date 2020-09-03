@@ -121,6 +121,7 @@ printf "${BLUE}####### ${RED}Once oh-my-zsh starts zsh, exit it to complete setu
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 rm ~/.zshrc
 ln -s $PWD/dotfiles/zshrc ~/.zshrc
+ln -s $PWD/dotfiles/nanorc ~/.nanorc
 
 # AWS Profile Tool
 #sudo ln -s $PWD/scripts/awsprof /usr/bin/awsprof
